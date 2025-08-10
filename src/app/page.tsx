@@ -5,6 +5,14 @@ import * as THREE from "three";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls, Stars } from "@react-three/drei";
 import { motion, useMotionValue, useTransform } from "framer-motion";
+import {
+  ContextMenu,
+  ContextMenuTrigger,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuLabel,
+} from "@/components/ui/context-menu";
 
 /**
  * Obvix AI – 3D Dark/Purple Landing (React + TS)
@@ -189,15 +197,15 @@ const Navbar: React.FC = () => (
   <div className="sticky top-0 z-40 w-full border-b border-white/10 bg-[#0b0b12]/70 backdrop-blur" data-testid="navbar">
     <Section className="flex h-16 items-center justify-between">
       <div className="flex items-center gap-3">
-        <div className="h-7 w-7 rounded-xl bg-gradient-to-br from-purple-500 to-fuchsia-500" />
-        <span className="text-sm font-semibold tracking-wide text-white/90">Obvix AI</span>
+       
+        <span className="text-sm font-semibold tracking-wide text-white/90">Obvix AI.</span>
       </div>
       <nav className="hidden md:flex items-center gap-7 text-sm">
         <a href="#features" className="text-white/70 hover:text-white">Features</a>
         <a href="#how" className="text-white/70 hover:text-white">How it works</a>
         <a href="#usecases" className="text-white/70 hover:text-white">Who we serve</a>
         <a href="#public" className="text-white/70 hover:text-white">Building in public</a>
-        <a href="#contact" className="text-white/70 hover:text-white">Contact</a>
+        <a href="mailto:hello@Karanprasad.com" className="text-white/70 hover:text-white">Contact</a>
       </nav>
     </Section>
   </div>
@@ -481,17 +489,32 @@ const Footer: React.FC = () => (
 // -------------------- Root -------------------- //
 export default function ObvixLanding() {
   return (
-    <div className="min-h-screen w-full bg-[#0b0b12] text-white" data-testid="root">
-      <Navbar />
-      {/* Add: non-scrolling grid overlay for depth, excluded from header area */}
-      <GridBackdrop />
-      <Hero3D />
-      <Features />
-      <HowItWorks />
-      <UseCases />
-      <BuildingInPublic />
-      <Footer />
-    </div>
+    <ContextMenu>
+      <ContextMenuTrigger asChild>
+        <div className="min-h-screen w-full bg-[#0b0b12] text-white" data-testid="root">
+          <Navbar />
+          {/* Add: non-scrolling grid overlay for depth, excluded from header area */}
+          <GridBackdrop />
+          <Hero3D />
+          <Features />
+          <HowItWorks />
+          <UseCases />
+          <BuildingInPublic />
+          <Footer />
+        </div>
+      </ContextMenuTrigger>
+      <ContextMenuContent align="start" className="w-64">
+        <ContextMenuLabel>Obvix AI</ContextMenuLabel>
+        <ContextMenuSeparator />
+        <ContextMenuItem onClick={() => scrollToId("features")}>Explore Features</ContextMenuItem>
+        <ContextMenuItem onClick={() => scrollToId("how")}>How it works</ContextMenuItem>
+        <ContextMenuItem onClick={() => scrollToId("usecases")}>Who we serve</ContextMenuItem>
+        <ContextMenuItem onClick={() => scrollToId("public")}>Building in public</ContextMenuItem>
+        <ContextMenuSeparator />
+        <ContextMenuItem onClick={() => (window.location.href = "mailto:hello@Karanprasad.com")}>Contact</ContextMenuItem>
+        <ContextMenuItem onClick={() => window.location.reload()}>Reload</ContextMenuItem>
+      </ContextMenuContent>
+    </ContextMenu>
   );
 }
 
