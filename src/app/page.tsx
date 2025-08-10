@@ -503,7 +503,7 @@ export default function ObvixLanding() {
           <Footer />
         </div>
       </ContextMenuTrigger>
-      <ContextMenuContent align="start" className="w-64">
+      <ContextMenuContent className="w-64">
         <ContextMenuLabel>Obvix AI</ContextMenuLabel>
         <ContextMenuSeparator />
         <ContextMenuItem onClick={() => scrollToId("features")}>Explore Features</ContextMenuItem>
