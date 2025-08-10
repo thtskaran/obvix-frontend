@@ -82,13 +82,16 @@ function NeonRings() {
 
 function HoloGrid() {
   return (
-    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.4, 0]} receiveShadow>
-      <planeGeometry args={[50, 50, 64, 64]} />
-      <meshStandardMaterial color="#201933" metalness={0.2} roughness={0.9} />
-      {/* Add a subtle grid helper */}
+    <group position={[0, -1.6, 0]}>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+        {/* Make the ground significantly larger to avoid abrupt end */}
+        <planeGeometry args={[500, 500, 128, 128]} />
+        <meshStandardMaterial color="#201933" metalness={0.2} roughness={0.95} />
+      </mesh>
+      {/* Extended grid helper placed outside the mesh for proper rendering */}
       {/* @ts-ignore */}
-      <gridHelper args={[30, 60, "#6d28d9", "#3b1c64"]} position={[0, 0.01, 0]} />
-    </mesh>
+      <gridHelper args={[400, 800, "#6d28d9", "#3b1c64"]} position={[0, 0.01, 0]} />
+    </group>
   );
 }
 
@@ -200,6 +203,23 @@ const Navbar: React.FC = () => (
   </div>
 );
 
+// Add: fixed grid backdrop (30% opacity), starts below header and doesn't scroll
+const GridBackdrop: React.FC = () => (
+  <div
+    aria-hidden
+    className="pointer-events-none fixed left-0 right-0 bottom-0"
+    style={{
+      top: "4rem", // h-16 header height
+      backgroundImage:
+        "linear-gradient(rgba(167,139,250,0.35) 1px, transparent 1px), linear-gradient(90deg, rgba(167,139,250,0.35) 1px, transparent 1px)",
+      backgroundSize: "40px 40px",
+      backgroundPosition: "top left",
+      opacity: 0.3,
+      zIndex: 0,
+    }}
+  />
+);
+
 const Hero3D: React.FC = () => {
   const mounted = useIsClient();
   return (
@@ -241,7 +261,10 @@ const Hero3D: React.FC = () => {
               <Tag>Open-source model ready</Tag>
               <Tag>On-prem & air‑gapped</Tag>
             </div>
-            <h1 className="text-4xl font-bold leading-tight text-white md:text-6xl">
+            <h1
+              className="text-4xl font-bold leading-tight text-white md:text-6xl"
+              style={{ textShadow: "0 8px 24px rgba(0,0,0,0.55), 0 2px 8px rgba(124,58,237,0.35)" }}
+            >
               Deploy <GradientText>safe, reliable</GradientText> AI — as easy as running an API.
             </h1>
             <p className="mt-4 max-w-2xl text-base text-white/70 md:text-lg">
@@ -260,6 +283,9 @@ const Hero3D: React.FC = () => {
           </motion.div>
         </Section>
       </div>
+
+      {/* Gentle fade into the rest of the page */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-36 bg-gradient-to-b from-transparent via-[#0b0b12]/70 to-[#0b0b12]" />
     </div>
   );
 };
@@ -457,6 +483,8 @@ export default function ObvixLanding() {
   return (
     <div className="min-h-screen w-full bg-[#0b0b12] text-white" data-testid="root">
       <Navbar />
+      {/* Add: non-scrolling grid overlay for depth, excluded from header area */}
+      <GridBackdrop />
       <Hero3D />
       <Features />
       <HowItWorks />
