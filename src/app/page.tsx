@@ -14,16 +14,7 @@ import {
   ContextMenuLabel,
 } from "@/components/ui/context-menu";
 
-/**
- * Obvix AI – 3D Dark/Purple Landing (React + TS)
- * -------------------------------------------------
- * Updates:
- *  - Added 'use client' to ensure client-only rendering (fixes source-read crash in Next.js)
- *  - Stronger hover animations with cursor tracking (buttons, cards)
- *  - 3D everywhere: enhanced hero with multiple objects + camera rig parallax
- *  - Tilted 3D cards with reflective gradient that tracks cursor
- *  - Kept tests and added a couple more (commented) for presence of Canvas and tilt wrappers
- */
+
 
 // -------------------- Helpers -------------------- //
 const isBrowser = typeof window !== "undefined";
@@ -92,11 +83,9 @@ function HoloGrid() {
   return (
     <group position={[0, -1.6, 0]}>
       <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-        {/* Make the ground significantly larger to avoid abrupt end */}
         <planeGeometry args={[500, 500, 128, 128]} />
         <meshStandardMaterial color="#201933" metalness={0.2} roughness={0.95} />
       </mesh>
-      {/* Extended grid helper placed outside the mesh for proper rendering */}
       {/* @ts-ignore */}
       <gridHelper args={[400, 800, "#6d28d9", "#3b1c64"]} position={[0, 0.01, 0]} />
     </group>
@@ -106,7 +95,6 @@ function HoloGrid() {
 function CameraRig() {
   const { camera, mouse } = useThree();
   useFrame(() => {
-    // Parallax towards mouse
     const targetX = mouse.x * 0.8;
     const targetY = mouse.y * 0.5;
     camera.position.x += (targetX - camera.position.x) * 0.05;
@@ -128,20 +116,17 @@ function useMouseTrack() {
   return { x, y, setFromEvent };
 }
 
-// Replace Tilt3D to remove 3D tilt and Z-translation while keeping shine.
 const Tilt3D: React.FC<{ children: React.ReactNode; intensity?: number; className?: string }> = ({ children, className }) => {
   const { x, y, setFromEvent } = useMouseTrack();
   return (
     <motion.div
       data-testid="tilt"
       onMouseMove={setFromEvent}
-      // Keep last cursor-driven gradient position after hover by not resetting onMouseLeave
       style={{ transform: "none", transformStyle: "flat" as any }}
       className={className}
       whileHover={{ scale: 1 }}
       transition={{ type: "spring", stiffness: 260, damping: 18 }}
     >
-      {/* Shine layer following cursor */}
       <motion.div
         aria-hidden
         className="pointer-events-none absolute inset-0 rounded-3xl"
@@ -154,12 +139,10 @@ const Tilt3D: React.FC<{ children: React.ReactNode; intensity?: number; classNam
   );
 };
 
-// Remove magnetic drift so the button stays straight.
 const MagneticButton: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>> = ({ children, className = "", onClick, ...props }) => {
   return (
     <motion.button
       data-testid="btn-shiny"
-      // No magnetic translation
       whileHover={{ scale: 1.03 }}
       transition={{ type: "spring", stiffness: 300, damping: 18 }}
       className={`group relative inline-flex items-center gap-2 overflow-hidden rounded-2xl border border-purple-500/30 px-5 py-3 font-medium text-white shadow-lg shadow-purple-950/40 ${className}`}
@@ -177,17 +160,17 @@ const MagneticButton: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>> = 
 };
 
 // -------------------- Layout -------------------- //
-const Section: React.FC<{ id?: string; className?: string; children: React.ReactNode }>=({ id, className = "", children })=> (
+const Section: React.FC<{ id?: string; className?: string; children: React.ReactNode }> = ({ id, className = "", children }) => (
   <section id={id} className={`relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 ${className}`}>{children}</section>
 );
 
-const Tag: React.FC<{ children: React.ReactNode }>=({ children })=> (
+const Tag: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70 backdrop-blur">
     {children}
   </span>
 );
 
-const GradientText: React.FC<{ children: React.ReactNode }>=({ children })=> (
+const GradientText: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <span className="bg-gradient-to-r from-purple-300 via-purple-400 to-fuchsia-400 bg-clip-text text-transparent">
     {children}
   </span>
@@ -197,7 +180,7 @@ const Navbar: React.FC = () => (
   <div className="sticky top-0 z-40 w-full border-b border-white/10 bg-[#0b0b12]/70 backdrop-blur" data-testid="navbar">
     <Section className="flex h-16 items-center justify-between">
       <div className="flex items-center gap-3">
-       
+
         <span className="text-sm font-semibold tracking-wide text-white/90">Obvix AI.</span>
       </div>
       <nav className="hidden md:flex items-center gap-7 text-sm">
@@ -211,13 +194,12 @@ const Navbar: React.FC = () => (
   </div>
 );
 
-// Add: fixed grid backdrop (30% opacity), starts below header and doesn't scroll
 const GridBackdrop: React.FC = () => (
   <div
     aria-hidden
     className="pointer-events-none fixed left-0 right-0 bottom-0"
     style={{
-      top: "4rem", // h-16 header height
+      top: "4rem",
       backgroundImage:
         "linear-gradient(rgba(167,139,250,0.35) 1px, transparent 1px), linear-gradient(90deg, rgba(167,139,250,0.35) 1px, transparent 1px)",
       backgroundSize: "40px 40px",
@@ -265,40 +247,39 @@ const Hero3D: React.FC = () => {
             className="max-w-3xl"
           >
             <div className="mb-4 flex flex-wrap gap-2">
-              <Tag>Security system + black box recorder</Tag>
-              <Tag>Open-source model ready</Tag>
-              <Tag>On-prem & air‑gapped</Tag>
+              <Tag>Built for SMEs & lean teams</Tag>
+              <Tag>On‑prem & cloud‑ready</Tag>
+              <Tag>Investor‑friendly safety reports</Tag>
             </div>
             <h1
               className="text-4xl font-bold leading-tight text-white md:text-6xl"
               style={{ textShadow: "0 8px 24px rgba(0,0,0,0.55), 0 2px 8px rgba(124,58,237,0.35)" }}
             >
-              Deploy <GradientText>safe, reliable</GradientText> AI — as easy as running an API.
+              Deploy <GradientText>AI with confidence</GradientText> — safety, control, and proof built in.
             </h1>
             <p className="mt-4 max-w-2xl text-base text-white/70 md:text-lg">
-              Obvix AI is a safety & control dashboard for your own models. Host locally, filter harmful outputs, red team pre‑launch, and trace bad answers back to their source.
+              Obvix AI is the safety & control layer for your AI. Run your preferred open‑source or local models, block risky outputs in real time, test before launch, and trace every answer back to its source — without hiring a dedicated ML safety team.
             </p>
             <div className="pointer-events-auto mt-8 flex flex-col gap-3 sm:flex-row">
-              <MagneticButton onClick={() => scrollToId("features")}>Explore Features</MagneticButton>
+              <MagneticButton onClick={() => scrollToId("features")}>See Safety in Action</MagneticButton>
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 onClick={() => scrollToId("contact")}
                 className="inline-flex items-center justify-center rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-white/80 backdrop-blur transition hover:bg-white/10"
               >
-                Get a Safety Report
+                Request a Sample Report
               </motion.button>
             </div>
           </motion.div>
         </Section>
       </div>
 
-      {/* Gentle fade into the rest of the page */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-36 bg-gradient-to-b from-transparent via-[#0b0b12]/70 to-[#0b0b12]" />
     </div>
   );
 };
 
-const FeatureCard: React.FC<{ title: string; desc: string; bullets: string[]; icon?: React.ReactNode }>=({ title, desc, bullets, icon })=> (
+const FeatureCard: React.FC<{ title: string; desc: string; bullets: string[]; icon?: React.ReactNode }> = ({ title, desc, bullets, icon }) => (
   <Tilt3D className="relative">
     <div className="group relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-white/[0.04] to-transparent p-6 shadow-xl shadow-purple-950/20">
       <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-purple-600/20 blur-3xl transition group-hover:bg-purple-500/30" />
@@ -331,33 +312,33 @@ const Features: React.FC = () => (
   <Section id="features" className="py-20" data-testid="features">
     <div className="mx-auto mb-10 max-w-3xl text-center">
       <h2 className="text-3xl font-bold text-white md:text-4xl">
-        Everything you need to ship <GradientText>safe AI</GradientText>
+        Everything you need to ship <GradientText>trustworthy AI</GradientText>
       </h2>
       <p className="mt-3 text-white/70">
-        Bring your own model. We add the safety layer: filtering, monitoring, red teaming, and traceability — all in one dashboard.
+        Obvix adds the missing safety layer to your existing stack — so you can launch AI features with confidence, demonstrate accountability to customers and investors, and keep full control over cost and infrastructure.
       </p>
     </div>
 
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
       <FeatureCard
-        title="Host & Proxy"
-        desc="Run models locally or on your servers with an OpenAI‑style API."
-        bullets={["Docker + Ollama/llama.cpp", "Token & rate limits", "Observability hooks"]}
+        title="Run Your AI, Your Way"
+        desc="Use your preferred open‑source or local models with a plug‑and‑play, OpenAI‑style API. Keep data ownership and avoid vendor lock‑in."
+        bullets={["Docker + Ollama/llama.cpp compatible", "Token & rate limits built‑in", "Observability hooks for your stack"]}
       />
       <FeatureCard
-        title="Filter & Monitor"
-        desc="Block harmful, biased, or unsafe content before it leaves the system."
-        bullets={["Safety filters & guardrails", "Persona vector drift monitoring", "PII & jailbreak detection"]}
+        title="Real‑Time Safety"
+        desc="Stop harmful, biased, or non‑compliant outputs before they reach users — without slowing down your product team."
+        bullets={["Live guardrails & policy checks", "PII & jailbreak detection", "Early warnings for risky behavior"]}
       />
       <FeatureCard
-        title="Red Team Testing"
-        desc="Attack your model pre‑launch with thousands of adversarial prompts."
-        bullets={["Automated test suites", "Coverage by threat category", "PDF safety report"]}
+        title="Prove It’s Safe"
+        desc="Simulate attacks before launch and share clear, investor‑friendly PDF reports that map risks to common frameworks."
+        bullets={["Automated adversarial testing", "Coverage by OWASP/NIST categories", "Exportable PDF safety reports"]}
       />
       <FeatureCard
-        title="Trace & Debug"
-        desc="See exactly where a bad answer came from — RAG doc or fine‑tuning data."
-        bullets={["Evidence trails", "Per‑chunk/source scoring", "One‑click suppression/removal"]}
+        title="Know the ‘Why’"
+        desc="When something goes wrong, instantly trace responses back to the source data to fix problems fast and build trust."
+        bullets={["Evidence‑linked answers", "Per‑document or dataset tracing", "One‑click suppression & follow‑up testing"]}
       />
     </div>
   </Section>
@@ -365,29 +346,32 @@ const Features: React.FC = () => (
 
 const HowItWorks: React.FC = () => (
   <Section id="how" className="py-20" data-testid="how">
+    <div className="mx-auto mb-10 max-w-3xl text-center">
+      <h2 className="text-3xl font-bold text-white md:text-4xl">How it works</h2>
+    </div>
     <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 md:grid-cols-2">
       <Tilt3D className="relative">
         <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-6">
           <div className="absolute -left-10 -top-10 h-40 w-40 rounded-full bg-fuchsia-600/20 blur-3xl" />
-          <h3 className="mb-2 text-xl font-semibold text-white">Pipeline</h3>
+          <h3 className="mb-2 text-xl font-semibold text-white">How Obvix fits your stack</h3>
           <ol className="space-y-3 text-sm text-white/80">
-            <li><strong className="text-white">1. Ingress:</strong> OpenAI‑style REST endpoint proxies to your local/open‑source model.</li>
-            <li><strong className="text-white">2. Safety:</strong> Static policies + dynamic classifiers gate responses in real‑time.</li>
-            <li><strong className="text-white">3. Monitoring:</strong> Persona vectors watch drift & risky behavior patterns.</li>
-            <li><strong className="text-white">4. Forensics:</strong> Trace answers to RAG chunks or fine‑tune examples.</li>
-            <li><strong className="text-white">5. Reporting:</strong> Exportable red‑team PDFs & dashboards for audits.</li>
+            <li><strong className="text-white">1. Connect:</strong> We plug into what you already use — local or cloud models — with a familiar API.</li>
+            <li><strong className="text-white">2. Protect:</strong> Real‑time guardrails and monitoring keep risky outputs from reaching customers.</li>
+            <li><strong className="text-white">3. Validate:</strong> Automated red‑team tests reveal issues before launch, with clear pass/fail insights.</li>
+            <li><strong className="text-white">4. Trace:</strong> Every answer is linked back to its source so fixes are fast and auditable.</li>
+            <li><strong className="text-white">5. Assure:</strong> Share exportable safety reports with clients, boards, and regulators.</li>
           </ol>
         </div>
       </Tilt3D>
       <Tilt3D className="relative">
         <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-6">
           <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-purple-600/20 blur-3xl" />
-          <h3 className="mb-2 text-xl font-semibold text-white">Why it’s different</h3>
+          <h3 className="mb-2 text-xl font-semibold text-white">Why teams choose Obvix</h3>
           <ul className="space-y-3 text-sm text-white/80">
-            <li>Designed for <span className="text-white">on‑prem & air‑gapped</span> deployments.</li>
-            <li>Works with <span className="text-white">any OSS model</span> (HF, local weights), no vendor lock‑in.</li>
-            <li>Gives <span className="text-white">provable safety</span> via automated red teaming and traceability.</li>
-            <li><span className="text-white">OpenAI‑style API</span> so your app code barely changes.</li>
+            <li>Purpose‑built for <span className="text-white">SMEs & startups</span> — minimal setup, quick value, and no need for a dedicated ML safety team.</li>
+            <li>Flexible deployment <span className="text-white">on‑prem, air‑gapped, or cloud</span> to match your security and cost needs without vendor lock‑in.</li>
+            <li>Turns safety into a <span className="text-white">competitive edge</span> with clear safety reports and proof you can show customers and investors.</li>
+            <li><span className="text-white">OpenAI‑style API</span> means your app code barely changes, ensuring smooth integration and low risk.</li>
           </ul>
         </div>
       </Tilt3D>
@@ -398,20 +382,24 @@ const HowItWorks: React.FC = () => (
 const UseCases: React.FC = () => (
   <Section id="usecases" className="py-20" data-testid="usecases">
     <div className="mx-auto mb-10 max-w-3xl text-center">
-      <h2 className="text-3xl font-bold text-white md:text-4xl">Who we cater to</h2>
-      <p className="mt-3 text-white/70">Built for SMEs, startups, and security‑conscious teams that need production‑grade safety without a large ML team.</p>
+      <h2 className="text-3xl font-bold text-white md:text-4xl">Who we serve</h2>
+      <p className="mt-3 text-white/70">Built for SMEs, startups, and security‑conscious teams that want production‑grade safety without hiring an in‑house ML team.</p>
     </div>
     <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-      {[{
-        title: "SMEs",
-        desc: "Ship AI features faster with safety, monitoring, and compliance baked‑in.",
-      }, {
-        title: "Developers & Startups",
-        desc: "Build on open‑source models while keeping enterprise‑grade guardrails.",
-      }, {
-        title: "Security Teams",
-        desc: "Demand proof of safety before launch with red team PDFs & dashboards.",
-      }].map((c) => (
+      {[
+        {
+          title: "SMEs",
+          desc: "Add AI to your product roadmap with confidence. Obvix reduces risk, shortens sales cycles, and gives customers the assurance they ask for.",
+        },
+        {
+          title: "Startups",
+          desc: "Ship faster with investor‑ready safety proofs. Keep costs predictable by running local or open‑source models with guardrails.",
+        },
+        {
+          title: "Security Teams",
+          desc: "Meet compliance requirements and reassure leadership with continuous testing, monitoring, and clear audit trails.",
+        },
+      ].map((c) => (
         <Tilt3D key={c.title} className="relative">
           <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-6">
             <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-purple-600/20 blur-3xl" />
@@ -424,21 +412,12 @@ const UseCases: React.FC = () => (
   </Section>
 );
 
-// New section: Building in public
 const BuildingInPublic: React.FC = () => (
   <Section id="public" className="py-20" data-testid="public">
     <div className="mx-auto max-w-3xl text-center">
       <h2 className="text-3xl font-bold text-white md:text-4xl">Building in public</h2>
       <p className="mt-3 text-white/70">
-        We’re building Obvix in public and are eager for all feedback, critiques, and ideas.
-        Dive into longer articles at{" "}
-        <a href="https://karanprasad.com" target="_blank" rel="noopener noreferrer" className="text-purple-300 hover:text-purple-200 underline">
-          karanprasad.com
-        </a>{" "}
-        or reach out on Twitter/X{" "}
-        <a href="https://twitter.com/thtskaran" target="_blank" rel="noopener noreferrer" className="text-purple-300 hover:text-purple-200 underline">
-          @thtskaran
-        </a>.
+        We believe trust is earned. That’s why we build Obvix in public — sharing what works, what doesn’t, and what’s next. For deeper technical write‑ups, benchmarks, and roadmap progress, follow along on our blog and LinkedIn.
       </p>
       <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
         <a
@@ -447,19 +426,19 @@ const BuildingInPublic: React.FC = () => (
           rel="noopener noreferrer"
           className="inline-flex items-center justify-center rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-white/80 backdrop-blur transition hover:bg-white/10"
         >
-          Read articles
+          Read product updates & articles
           <svg className="ml-2 h-4 w-4 opacity-80" viewBox="0 0 20 20" fill="currentColor" aria-hidden>
             <path d="M12.293 3.293a1 1 0 011.414 0l4.999 5a1 1 0 010 1.414l-5 5a1 1 0 11-1.414-1.414L15.586 10l-3.293-3.293a1 1 0 010-1.414z" />
             <path d="M2 10a1 1 0 011-1h13a1 1 0 110 2H3a1 1 0 01-1-1z" />
           </svg>
         </a>
         <a
-          href="https://twitter.com/thtskaran"
+          href="https://x.com/thtskaran"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center justify-center rounded-2xl border border-purple-500/30 px-5 py-3 text-white shadow-lg shadow-purple-950/40 transition hover:bg-white/5"
         >
-          Follow @thtskaran
+          Connect on Twitter/X
           <svg className="ml-2 h-4 w-4 opacity-80" viewBox="0 0 20 20" fill="currentColor" aria-hidden>
             <path d="M12.293 3.293a1 1 0 011.414 0l4.999 5a1 1 0 010 1.414l-5 5a1 1 0 11-1.414-1.414L15.586 10l-3.293-3.293a1 1 0 010-1.414z" />
             <path d="M2 10a1 1 0 011-1h13a1 1 0 110 2H3a1 1 0 01-1-1z" />
@@ -478,9 +457,8 @@ const Footer: React.FC = () => (
         <span className="text-sm text-white/70">© {new Date().getFullYear()} Obvix AI</span>
       </div>
       <div className="flex items-center gap-6 text-sm text-white/60">
-        <a href="#" className="hover:text-white">Privacy</a>
-        <a href="#" className="hover:text-white">Security</a>
-        <a href="#" className="hover:text-white">Status</a>
+        <a href="/privacy" className="hover:text-white">Privacy</a>
+        <a href="/security" className="hover:text-white">Security</a>
       </div>
     </Section>
   </footer>
@@ -493,7 +471,6 @@ export default function ObvixLanding() {
       <ContextMenuTrigger asChild>
         <div className="min-h-screen w-full bg-[#0b0b12] text-white" data-testid="root">
           <Navbar />
-          {/* Add: non-scrolling grid overlay for depth, excluded from header area */}
           <GridBackdrop />
           <Hero3D />
           <Features />
@@ -517,4 +494,3 @@ export default function ObvixLanding() {
     </ContextMenu>
   );
 }
-
