@@ -156,6 +156,17 @@ export default function SecurityPage() {
                     </p>
                   </section>
                 </div>
+
+                {/* Back to Home button */}
+                <div className="mt-14">
+                  <button
+                    onClick={() => (window.location.href = "/")}
+                    className="group relative inline-flex items-center gap-2 rounded-2xl border border-purple-500/30 px-6 py-3 text-sm font-medium text-white shadow-lg shadow-purple-950/40 transition hover:bg-white/5"
+                  >
+                    <span className="relative">← Back to Home</span>
+                    <span className="absolute inset-0 rounded-2xl bg-[radial-gradient(400px_circle_at_var(--x,50%)_var(--y,50%),rgba(167,139,250,0.18),transparent_60%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                  </button>
+                </div>
               </div>
             </Section>
           </main>
