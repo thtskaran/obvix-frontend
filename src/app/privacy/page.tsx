@@ -9,6 +9,7 @@ import {
   ContextMenuSeparator,
   ContextMenuLabel,
 } from "@/components/ui/context-menu";
+import Link from 'next/link';
 
 const Section: React.FC<{ id?: string; className?: string; children: React.ReactNode }> = ({ id, className = "", children }) => (
   <section id={id} className={`relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 ${className}`}>{children}</section>
@@ -21,10 +22,10 @@ const Navbar: React.FC = () => (
         <span className="text-sm font-semibold tracking-wide text-white/90">Obvix AI.</span>
       </div>
       <nav className="hidden md:flex items-center gap-7 text-sm">
-        <a href="/#features" className="text-white/70 hover:text-white">Features</a>
-        <a href="/#how" className="text-white/70 hover:text-white">How it works</a>
-        <a href="/#usecases" className="text-white/70 hover:text-white">Who we serve</a>
-        <a href="/#public" className="text-white/70 hover:text-white">Building in public</a>
+        <Link href="/#features" className="text-white/70 hover:text-white">Features</Link>
+        <Link href="/#how" className="text-white/70 hover:text-white">How it works</Link>
+        <Link href="/#usecases" className="text-white/70 hover:text-white">Who we serve</Link>
+        <Link href="/#public" className="text-white/70 hover:text-white">Building in public</Link>
         <a href="mailto:hello@Karanprasad.com" className="text-white/70 hover:text-white">Contact</a>
       </nav>
     </Section>

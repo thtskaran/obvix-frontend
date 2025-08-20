@@ -19,6 +19,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import Link from 'next/link';
 
 
 // -------------------- Splash Loader -------------------- //
@@ -127,7 +128,7 @@ function HoloGrid() {
         <planeGeometry args={[500, 500, 128, 128]} />
         <meshStandardMaterial color="#201933" metalness={0.2} roughness={0.95} />
       </mesh>
-      {/* @ts-ignore */}
+     
       <gridHelper args={[400, 800, "#6d28d9", "#3b1c64"]} position={[0, 0.01, 0]} />
     </group>
   );
@@ -159,11 +160,12 @@ function useMouseTrack() {
 
 const Tilt3D: React.FC<{ children: React.ReactNode; intensity?: number; className?: string }> = ({ children, className }) => {
   const { x, y, setFromEvent } = useMouseTrack();
+  const bg = useTransform([x, y], ([vx, vy]) => `radial-gradient(600px circle at ${vx}px ${vy}px, rgba(167,139,250,0.18), transparent 40%)`);
   return (
     <motion.div
       data-testid="tilt"
       onMouseMove={setFromEvent}
-      style={{ transform: "none", transformStyle: "flat" as any }}
+      style={{ transform: "none", transformStyle: 'flat' }}
       className={className}
       whileHover={{ scale: 1 }}
       transition={{ type: "spring", stiffness: 260, damping: 18 }}
@@ -171,9 +173,7 @@ const Tilt3D: React.FC<{ children: React.ReactNode; intensity?: number; classNam
       <motion.div
         aria-hidden
         className="pointer-events-none absolute inset-0 rounded-3xl"
-        style={{
-          background: useTransform(x, (vx) => `radial-gradient(600px circle at ${vx}px 50%, rgba(167,139,250,0.18), transparent 40%)`),
-        }}
+        style={{ background: bg }}
       />
       <div className="relative">{children}</div>
     </motion.div>
@@ -397,7 +397,7 @@ const HowItWorks: React.FC = () => (
           <div className="absolute -left-10 -top-10 h-40 w-40 rounded-full bg-fuchsia-600/20 blur-3xl" />
           <h3 className="mb-3 text-xl font-semibold text-white">How Obvix Fits Your Stack</h3>
           <ol className="space-y-4 text-sm text-white/80">
-            <li className="flex items-start gap-3"><strong className="text-purple-300 text-lg font-bold">1.</strong> <span><strong className="text-white">Point to Obvix:</strong> Simply change the base URL in your existing code to our proxy endpoint. That's it.</span></li>
+            <li className="flex items-start gap-3"><strong className="text-purple-300 text-lg font-bold">1.</strong> <span><strong className="text-white">Point to Obvix:</strong> Simply change the base URL in your existing code to our proxy endpoint. That&apos;s it.</span></li>
             <li className="flex items-start gap-3"><strong className="text-purple-300 text-lg font-bold">2.</strong> <span><strong className="text-white">Intercept & Filter:</strong> We analyze every incoming prompt and outgoing response in real-time for 13+ risk categories.</span></li>
             <li className="flex items-start gap-3"><strong className="text-purple-300 text-lg font-bold">3.</strong> <span><strong className="text-white">Block or Allow:</strong> Based on your policies, unsafe content is blocked, and safe content is passed through seamlessly to your users.</span></li>
           </ol>
@@ -469,7 +469,7 @@ const Faq: React.FC = () => {
     },
     {
       q: "How much latency does Obvix add?",
-      a: "Performance is critical. Our proxy is optimized for speed and adds minimal overhead. On consumer-grade hardware, we've tested our filtering to add as little as 133ms of latency to your API calls."
+      a: "Performance is critical. Our proxy is optimized for speed and adds minimal overhead. On consumer-grade hardware, we&apos;ve tested our filtering to add as little as 133ms of latency to your API calls."
     },
     {
       q: "Do you store or log our data?",
@@ -505,7 +505,7 @@ const BuildingInPublic: React.FC = () => (
     <div className="mx-auto max-w-3xl text-center">
       <h2 className="text-3xl font-bold text-white md:text-4xl">Building in Public</h2>
       <p className="mt-3 text-white/70">
-        Trust is earned through transparency. We're building Obvix in public, sharing our progress, challenges, and roadmap. Follow along for technical write-ups, benchmarks, and product updates.
+        Trust is earned through transparency. We&apos;re building Obvix in public, sharing our progress, challenges, and roadmap. Follow along for technical write-ups, benchmarks, and product updates.
       </p>
       <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
         <a
@@ -563,7 +563,7 @@ const Waitlist: React.FC = () => {
                             exit={{ opacity: 0, y: -6 }}
                             className="mt-6 text-base font-medium text-purple-300"
                         >
-                            Thanks for joining! We'll be in touch.
+                            Thanks for joining! We&apos;ll be in touch.
                         </motion.div>
                     ) : (
                         <motion.form
@@ -602,8 +602,8 @@ const Footer: React.FC = () => (
         <span className="text-sm text-white/70">© {new Date().getFullYear()} Obvix AI</span>
       </div>
       <div className="flex items-center gap-6 text-sm text-white/60">
-        <a href="/privacy" className="hover:text-white">Privacy</a>
-        <a href="/security" className="hover:text-white">Security</a>
+        <Link href="/privacy" className="hover:text-white">Privacy</Link>
+        <Link href="/security" className="hover:text-white">Security</Link>
       </div>
     </Section>
   </footer>
